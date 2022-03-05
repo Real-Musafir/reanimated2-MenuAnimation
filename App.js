@@ -1,19 +1,46 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView } from "react-native";
+import { PanGestureHandler } from "react-native-gesture-handler";
+import Animated, {
+  useAnimatedGestureHandler,
+  useAnimatedStyle,
+  useSharedValue,
+} from "react-native-reanimated";
 
 export default function App() {
+  const translateX = useSharedValue(0);
+
+  const panGestureEvent = useAnimatedGestureHandler({
+    onActive: (event) => {
+      translateX.value = event.translationX;
+    },
+  });
+
+  const rStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateX: translateX.value,
+        },
+      ],
+    };
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <Text>asdf</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <StatusBar style="inverted" />
+      <PanGestureHandler onGestureEvent={panGestureEvent}>
+        <Animated.View
+          style={[{ backgroundColor: "white", flex: 1 }, rStyle]}
+        />
+      </PanGestureHandler>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "#1e1e1e",
   },
 });
