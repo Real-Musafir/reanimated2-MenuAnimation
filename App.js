@@ -5,8 +5,12 @@ import Animated, {
   useAnimatedGestureHandler,
   useAnimatedStyle,
   useSharedValue,
+  withTiming,
 } from "react-native-reanimated";
+import { Dimensions } from "react-native";
 
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
+const THRESHOLD = SCREEN_WIDTH / 3;
 export default function App() {
   const translateX = useSharedValue(0);
 
@@ -16,6 +20,13 @@ export default function App() {
     },
     onActive: (event, context) => {
       translateX.value = event.translationX + context.x;
+    },
+    onEnd: () => {
+      if (translateX.value <= THRESHOLD) {
+        translateX.value = withTiming(0);
+      } else {
+        translateX.value = withTiming(SCREEN_WIDTH / 2);
+      }
     },
   });
 
