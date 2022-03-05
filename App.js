@@ -2,6 +2,8 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import Animated, {
+  Extrapolate,
+  interpolate,
   useAnimatedGestureHandler,
   useAnimatedStyle,
   useSharedValue,
@@ -31,10 +33,20 @@ export default function App() {
   });
 
   const rStyle = useAnimatedStyle(() => {
+    const rotate = interpolate(
+      translateX.value,
+      [0, SCREEN_WIDTH / 2],
+      [0, 3],
+      Extrapolate.CLAMP
+    );
     return {
       transform: [
+        { perspective: 100 },
         {
           translateX: translateX.value,
+        },
+        {
+          rotateY: `-${rotate}deg`,
         },
       ],
     };
