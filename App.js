@@ -39,7 +39,16 @@ export default function App() {
       [0, 3],
       Extrapolate.CLAMP
     );
+
+    const borderRadius = interpolate(
+      translateX.value,
+      [0, SCREEN_WIDTH / 2],
+      [0, 15],
+      Extrapolate.CLAMP
+    );
+
     return {
+      borderRadius,
       transform: [
         { perspective: 100 },
         {
