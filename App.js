@@ -11,8 +11,11 @@ export default function App() {
   const translateX = useSharedValue(0);
 
   const panGestureEvent = useAnimatedGestureHandler({
-    onActive: (event) => {
-      translateX.value = event.translationX;
+    onStart: (_, context) => {
+      context.x = translateX.value;
+    },
+    onActive: (event, context) => {
+      translateX.value = event.translationX + context.x;
     },
   });
 
