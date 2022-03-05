@@ -10,6 +10,8 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { Dimensions } from "react-native";
+import { Feather } from "@expo/vector-icons";
+import { useCallback } from "react";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const THRESHOLD = SCREEN_WIDTH / 3;
@@ -61,13 +63,27 @@ export default function App() {
     };
   }, []);
 
+  const onPress = useCallback(() => {
+    if (translateX.value > 0) {
+      translateX.value = withTiming(0);
+    } else {
+      translateX.value = withTiming(SCREEN_WIDTH / 2);
+    }
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="inverted" />
       <PanGestureHandler onGestureEvent={panGestureEvent}>
-        <Animated.View
-          style={[{ backgroundColor: "white", flex: 1 }, rStyle]}
-        />
+        <Animated.View style={[{ backgroundColor: "white", flex: 1 }, rStyle]}>
+          <Feather
+            name="menu"
+            size={32}
+            color="#1e1e1e"
+            style={{ margin: 15 }}
+            onPress={onPress}
+          />
+        </Animated.View>
       </PanGestureHandler>
     </SafeAreaView>
   );
